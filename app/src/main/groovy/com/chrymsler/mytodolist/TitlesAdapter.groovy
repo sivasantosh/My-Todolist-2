@@ -43,7 +43,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<ViewHolder> {
         }
     }
 
-    TitlesAdapter (def dataSet) {
-        mDataSet = dataSet;
+    TitlesAdapter () {
+        mDataSet = ThisApplication.instance.titles
     }
 }

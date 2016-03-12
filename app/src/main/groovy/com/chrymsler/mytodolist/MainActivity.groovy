@@ -21,8 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this))
 
-        def data = ["test 1", "test 2", "test 3", "test 4"] as String[]
-        mRecyclerView.setAdapter(new TitlesAdapter(data))
+        mRecyclerView.setAdapter(new TitlesAdapter())
     }
 
     @Override
