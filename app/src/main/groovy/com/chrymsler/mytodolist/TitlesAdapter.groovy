@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 public class TitlesAdapter extends RecyclerView.Adapter<ViewHolder> {
     String[] mDataSet
+    MainActivity mainActivity;
 
     @Override
     ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -23,7 +24,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<ViewHolder> {
         viewHolder.titleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(View v) {
-                Log.d("testapp", "clicked on "+name)
+                mainActivity.gotoTodoListActivity(name)
             }
         })
     }
@@ -43,7 +44,12 @@ public class TitlesAdapter extends RecyclerView.Adapter<ViewHolder> {
         }
     }
 
-    TitlesAdapter () {
+    TitlesAdapter (MainActivity activity) {
+        mainActivity = activity
         mDataSet = ThisApplication.instance.titles
+    }
+
+    void addTodoList(String title) {
+        mDataSet += title
     }
 }

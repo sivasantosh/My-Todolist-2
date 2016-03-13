@@ -1,7 +1,8 @@
 package com.chrymsler.mytodolist
 
 import android.app.AlertDialog
-import android.content.DialogInterface;
+import android.content.DialogInterface
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
+    TitlesAdapter mTitlesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this))
 
-        mRecyclerView.setAdapter(new TitlesAdapter())
+        mTitlesAdapter = new TitlesAdapter(this)
+        mRecyclerView.setAdapter(mTitlesAdapter)
     }
 
     @Override
@@ -47,13 +50,14 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.new_list:
                 EditText input = new EditText(this)
+                def that = this;
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this).
                         setTitle("New TodoList").
                         setView(input).
                         setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             void onClick(DialogInterface dialog, int which) {
-                                Log.d("testapp", "say "+input.getText().toString())
+                                gotoTodoListActivity(input.getText().toString())
                             }
                         }).
                         setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -63,12 +67,21 @@ public class MainActivity extends AppCompatActivity {
                             }
                         })
 
-                        dialog.show()
+                dialog.show()
                 return true;
             case R.id.action_settings:
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    void gotoTodoListActivity (String title) {
+        mTitlesAdapter.addTodoList(title)
+
+        Intent intent = new Intent(this, TodoListActivity.class)
+        intent.putExtra("title", title)
+
+        startActivity(intent)
     }
 }
