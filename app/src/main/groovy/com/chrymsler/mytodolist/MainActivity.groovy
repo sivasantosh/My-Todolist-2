@@ -1,11 +1,15 @@
-package com.chrymsler.mytodolist;
+package com.chrymsler.mytodolist
 
+import android.app.AlertDialog
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem
+import android.widget.EditText
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,7 +46,24 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.new_list:
-                Toast.makeText(this, "New List clicked", Toast.LENGTH_LONG).show()
+                EditText input = new EditText(this)
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this).
+                        setTitle("New TodoList").
+                        setView(input).
+                        setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            void onClick(DialogInterface dialog, int which) {
+                                Log.d("testapp", "say "+input.getText().toString())
+                            }
+                        }).
+                        setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel()
+                            }
+                        })
+
+                        dialog.show()
                 return true;
             case R.id.action_settings:
                 return true;
