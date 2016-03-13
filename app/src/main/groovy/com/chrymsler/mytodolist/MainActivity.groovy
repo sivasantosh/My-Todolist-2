@@ -5,7 +5,8 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MenuItem
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
@@ -39,8 +40,12 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.new_list:
+                Toast.makeText(this, "New List clicked", Toast.LENGTH_LONG).show()
+                return true;
+            case R.id.action_settings:
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
