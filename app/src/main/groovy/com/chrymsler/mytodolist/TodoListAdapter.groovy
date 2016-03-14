@@ -26,7 +26,8 @@ public class TodoListAdapter extends RecyclerView.Adapter<ViewHolder> {
             @Override
             void onClick(View v) {
                 // edit this item
-                mTodoListActivity.editTodoItem(position, item)
+                int pos = ThisApplication.instance.todos[index].findIndexOf { it == item }
+                mTodoListActivity.editTodoItem(pos, item)
             }
         })
     }
