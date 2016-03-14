@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem
@@ -35,6 +36,49 @@ public class TodoListActivity extends AppCompatActivity {
         // create and link adapter with recycler view
         mAdapter = new TodoListAdapter(mIndex, this)
         mTodolistView.setAdapter(mAdapter)
+
+        ItemTouchHelper ith = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                return makeMovementFlags(
+                        ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT
+                )
+            }
+
+            @Override
+            boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                int fromPos = viewHolder.getAdapterPosition()
+                int toPos = target.getAdapterPosition()
+
+                if (fromPos < toPos) {
+                    for (int i = fromPos; i < toPos; i++) {
+                        def tmp = ThisApplication.instance.todos[mIndex][i]
+                        ThisApplication.instance.todos[mIndex][i] = ThisApplication.instance.todos[mIndex][i+1]
+                        ThisApplication.instance.todos[mIndex][i+1] = tmp
+                    }
+                } else {
+                    for (int i = fromPos; i > toPos ; i--) {
+                        def tmp = ThisApplication.instance.todos[mIndex][i]
+                        ThisApplication.instance.todos[mIndex][i] = ThisApplication.instance.todos[mIndex][i-1]
+                        ThisApplication.instance.todos[mIndex][i-1] = tmp
+                    }
+                }
+
+                mAdapter.notifyItemMoved(fromPos, toPos)
+
+                return true
+            }
+
+            @Override
+            void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int pos = viewHolder.getAdapterPosition()
+                ThisApplication.instance.todos[mIndex].removeAt(pos)
+                mAdapter.notifyItemRemoved(pos)
+            }
+        })
+
+        ith.attachToRecyclerView(mTodolistView)
     }
 
     @Override
@@ -93,7 +137,7 @@ public class TodoListActivity extends AppCompatActivity {
                     @Override
                     void onClick(DialogInterface dialog, int which) {
                         ThisApplication.instance.todos[mIndex][index] = input.getText().toString()
-                        mAdapter.notifyItemChanged(ThisApplication.instance.todos[mIndex].size() - 1)
+                        mAdapter.notifyItemChanged(index)
                     }
                 }).
                 setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
