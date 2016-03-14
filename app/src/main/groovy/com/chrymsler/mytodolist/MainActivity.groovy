@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void gotoTodoListActivity (int index) {
-        println "going to index " + index
         Intent intent = new Intent(this, TodoListActivity.class)
         intent.putExtra("index", index)
 
