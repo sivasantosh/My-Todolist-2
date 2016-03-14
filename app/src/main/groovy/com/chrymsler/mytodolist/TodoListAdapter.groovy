@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class TodoListAdapter extends RecyclerView.Adapter<ViewHolder> {
+    TodoListActivity mTodoListActivity
     int index;
 
     @Override
@@ -24,7 +25,8 @@ public class TodoListAdapter extends RecyclerView.Adapter<ViewHolder> {
         holder.todoItem.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(View v) {
-                Log.d("testapp", "clicked "+item)
+                // edit this item
+                mTodoListActivity.editTodoItem(position, item)
             }
         })
     }
@@ -44,7 +46,8 @@ public class TodoListAdapter extends RecyclerView.Adapter<ViewHolder> {
         }
     }
 
-    TodoListAdapter (int i) {
+    TodoListAdapter (int i, TodoListActivity activity) {
+        mTodoListActivity = activity
         index = i
     }
 }

@@ -33,7 +33,7 @@ public class TodoListActivity extends AppCompatActivity {
         mTodolistView.setLayoutManager(new LinearLayoutManager(this))
 
         // create and link adapter with recycler view
-        mAdapter = new TodoListAdapter(mIndex)
+        mAdapter = new TodoListAdapter(mIndex, this)
         mTodolistView.setAdapter(mAdapter)
     }
 
@@ -80,5 +80,28 @@ public class TodoListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    void editTodoItem (int index, String todo) {
+        EditText input = new EditText(this)
+        input.setText(todo)
+
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this).
+                setTitle("New Todo").
+                setView(input).
+                setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    void onClick(DialogInterface dialog, int which) {
+                        ThisApplication.instance.todos[mIndex][index] = input.getText().toString()
+                        mAdapter.notifyItemChanged(ThisApplication.instance.todos[mIndex].size() - 1)
+                    }
+                }).
+                setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel()
+                    }
+                })
+        dialog.show()
     }
 }
