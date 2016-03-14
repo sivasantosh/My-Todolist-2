@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup;
 
 public class TitlesAdapter extends RecyclerView.Adapter<ViewHolder> {
-    String[] mDataSet
     MainActivity mainActivity;
 
     @Override
@@ -18,20 +17,20 @@ public class TitlesAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     void onBindViewHolder(ViewHolder viewHolder, int i) {
-        def name = mDataSet[i]
+        def name = ThisApplication.instance.titles[i]
         viewHolder.titleTextView.setText(name)
 
         viewHolder.titleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(View v) {
-                mainActivity.gotoTodoListActivity(name)
+                mainActivity.gotoTodoListActivity(i)
             }
         })
     }
 
     @Override
     int getItemCount() {
-        return mDataSet.size()
+        return ThisApplication.instance.titles.size()
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -46,10 +45,13 @@ public class TitlesAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     TitlesAdapter (MainActivity activity) {
         mainActivity = activity
-        mDataSet = ThisApplication.instance.titles
     }
 
-    void addTodoList(String title) {
-        mDataSet += title
+    int addTodoList(String title) {
+        ThisApplication.instance.titles += title
+        int i = (ThisApplication.instance.titles.size() - 1)
+        ThisApplication.instance.todos[i] = []
+
+        return i
     }
 }

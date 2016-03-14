@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                         setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             void onClick(DialogInterface dialog, int which) {
-                                gotoTodoListActivity(input.getText().toString())
+                                gotoTodoListActivity(mTitlesAdapter.addTodoList(input.getText().toString()))
                             }
                         }).
                         setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -76,11 +76,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    void gotoTodoListActivity (String title) {
-        mTitlesAdapter.addTodoList(title)
-
+    void gotoTodoListActivity (int index) {
+        println "going to index " + index
         Intent intent = new Intent(this, TodoListActivity.class)
-        intent.putExtra("title", title)
+        intent.putExtra("index", index)
 
         startActivity(intent)
     }
