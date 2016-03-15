@@ -163,4 +163,11 @@ public class MainActivity extends AppCompatActivity {
 
         dialog.show()
     }
+
+    @Override
+    protected void onDestroy() {
+        ThisApplication.instance.saveToFile()
+
+        super.onDestroy()
+    }
 }

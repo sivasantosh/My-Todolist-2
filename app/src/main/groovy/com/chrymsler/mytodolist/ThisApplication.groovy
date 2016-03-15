@@ -1,6 +1,9 @@
 package com.chrymsler.mytodolist;
 
-import android.app.Application;
+import android.app.Application
+import android.content.Context
+import org.json.JSONArray
+import org.json.JSONObject;
 
 public class ThisApplication extends Application {
     static ThisApplication singleton
@@ -17,15 +20,73 @@ public class ThisApplication extends Application {
 
         singleton = this
 
+        def jsondata
+
+        // load data from file
+        File file = new File(getFilesDir(), "appdata")
+        if (file.exists()) {
+            FileInputStream inputStream = new FileInputStream(file)
+            byte[] bytes = new byte[file.length()]
+            try {
+                inputStream.read(bytes)
+            } finally {
+                inputStream.close()
+            }
+
+            jsondata = new String(bytes)
+        } else {
+            jsondata = '{"main":[{"title":"sample list", "todos":[ {"todo":"item 1"}, {"todo":"item 2"}, {"todo":"item 3"} ]}]}'
+        }
+
         // loading mock values
-        titles = ["testy 1", "testy 2", "testy 3"]
+        titles = []
         todos = [[]]
 
-        titles.eachWithIndex { String entry, int i ->
+        JSONObject jsonObject = new JSONObject(jsondata)
+        JSONArray jsonArray = jsonObject.getJSONArray("main")
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject obj = jsonArray.get(i)
+            titles[i] = obj.get("title")
+
             todos[i] = []
-            (0..3).each {
-                todos[i][it] = titles[i] + ": " + it
+            JSONArray jsonArray1 = obj.getJSONArray("todos")
+            for (int j = 0; j < jsonArray1.length(); j++) {
+                JSONObject obj1 = jsonArray1.get(j)
+                todos[i][j] = obj1.get("todo")
             }
+        }
+    }
+
+    void saveToFile () {
+        JSONArray arr1 = new JSONArray()
+        for (int i = 0; i < titles.size(); i++) {
+            JSONArray arr2 = new JSONArray()
+            for (int j = 0; j < todos[i].size(); j++) {
+                JSONObject obj = new JSONObject()
+                obj.put("todo", todos[i][j])
+                arr2.put(obj)
+            }
+
+            JSONObject obj2 = new JSONObject()
+            obj2.put("title", titles[i])
+            obj2.put("todos", arr2)
+
+            arr1.put(obj2)
+        }
+
+        JSONObject obj3 = new JSONObject()
+        obj3.put("main", arr1)
+
+        FileOutputStream outputStream
+
+        outputStream = openFileOutput("appdata", Context.MODE_PRIVATE)
+        try {
+            outputStream.write(obj3.toString().bytes)
+        } catch (Exception e) {
+            e.printStackTrace()
+        } finally {
+            outputStream.close()
         }
     }
 }
