@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem
@@ -30,6 +31,63 @@ public class MainActivity extends AppCompatActivity {
 
         mTitlesAdapter = new TitlesAdapter(this)
         mRecyclerView.setAdapter(mTitlesAdapter)
+
+        ItemTouchHelper ith = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                return makeMovementFlags(
+                        ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT
+                )
+            }
+
+            @Override
+            boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                int fromPos = viewHolder.adapterPosition
+                int toPos = target.adapterPosition
+
+                if (fromPos < toPos) {
+                    for (int i = fromPos; i < toPos; i++) {
+                        println "< "+i
+                        def tmp = ThisApplication.instance.titles[i]
+                        ThisApplication.instance.titles[i] = ThisApplication.instance.titles[i+1]
+                        ThisApplication.instance.titles[i+1] = tmp
+                    }
+                } else {
+                    for (int i = fromPos; i > toPos; i--) {
+                        println "> "+i
+                        def tmp = ThisApplication.instance.titles[i]
+                        ThisApplication.instance.titles[i] = ThisApplication.instance.titles[i-1]
+                        ThisApplication.instance.titles[i-1] = tmp
+                    }
+                }
+
+                println "exchanging "+fromPos+" to "+toPos
+
+                def tmp1 = ThisApplication.instance.todos[fromPos]
+                ThisApplication.instance.todos[fromPos] = ThisApplication.instance.todos[toPos]
+                ThisApplication.instance.todos[toPos] = tmp1
+
+                println "comparing from "+ThisApplication.instance.titles[fromPos]+" "+ThisApplication.instance.todos[fromPos][0]
+                println "comparing to "+ThisApplication.instance.titles[toPos]+" "+ThisApplication.instance.todos[toPos][0]
+
+                mTitlesAdapter.notifyItemMoved(fromPos, toPos)
+
+                return true
+            }
+
+            @Override
+            void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                // delete the respective title and todolist
+                int pos = viewHolder.adapterPosition
+                ThisApplication.instance.todos.removeAt(pos)
+                ThisApplication.instance.titles.removeAt(pos)
+
+                mTitlesAdapter.notifyItemRemoved(pos)
+            }
+        })
+
+        ith.attachToRecyclerView(mRecyclerView)
     }
 
     @Override

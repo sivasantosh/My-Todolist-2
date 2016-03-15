@@ -23,7 +23,8 @@ public class TitlesAdapter extends RecyclerView.Adapter<ViewHolder> {
         viewHolder.titleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(View v) {
-                mainActivity.gotoTodoListActivity(i)
+                int pos = ThisApplication.instance.titles.findIndexOf { it == name }
+                mainActivity.gotoTodoListActivity(pos)
             }
         })
     }

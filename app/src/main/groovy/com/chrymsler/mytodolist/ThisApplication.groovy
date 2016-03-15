@@ -4,7 +4,7 @@ import android.app.Application;
 
 public class ThisApplication extends Application {
     static ThisApplication singleton
-    String[] titles
+    def titles
     def todos
 
     public static def getInstance () {
