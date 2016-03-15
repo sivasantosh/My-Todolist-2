@@ -4,7 +4,8 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup;
+import android.view.ViewGroup
+import android.widget.TextView;
 
 public class TitlesAdapter extends RecyclerView.Adapter<ViewHolder> {
     MainActivity mainActivity;
@@ -27,6 +28,15 @@ public class TitlesAdapter extends RecyclerView.Adapter<ViewHolder> {
                 mainActivity.gotoTodoListActivity(pos)
             }
         })
+
+        viewHolder.titleTextView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            boolean onLongClick(View v) {
+                int pos = ThisApplication.instance.titles.findIndexOf { it == name }
+                mainActivity.editTitle(pos)
+                return true
+            }
+        })
     }
 
     @Override
@@ -35,12 +45,12 @@ public class TitlesAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        def titleTextView;
+        TextView titleTextView;
 
         ViewHolder (View v) {
             super(v);
 
-            titleTextView = v.findViewById(R.id.titleTextView)
+            titleTextView = (TextView) v.findViewById(R.id.titleTextView)
         }
     }
 

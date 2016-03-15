@@ -140,4 +140,27 @@ public class MainActivity extends AppCompatActivity {
 
         startActivity(intent)
     }
+
+    void editTitle (int index) {
+        EditText input = new EditText(this)
+        input.setText(ThisApplication.instance.titles[index])
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this).
+                setTitle("New TodoList").
+                setView(input).
+                setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    void onClick(DialogInterface dialog, int which) {
+                        ThisApplication.instance.titles[index] = input.getText().toString()
+                        mTitlesAdapter.notifyItemChanged(index)
+                    }
+                }).
+                setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel()
+                    }
+                })
+
+        dialog.show()
+    }
 }
