@@ -2,7 +2,8 @@ package com.chrymsler.mytodolist
 
 import android.app.AlertDialog
 import android.content.DialogInterface
-import android.content.Intent;
+import android.content.Intent
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -164,9 +165,18 @@ public class MainActivity extends AppCompatActivity {
         dialog.show()
     }
 
+    class SaveToFile extends AsyncTask<Object, Void, Void> {
+        @Override
+        protected Void doInBackground(Object... params) {
+            ThisApplication.instance.saveToFile()
+
+            return null
+        }
+    }
+
     @Override
     protected void onStop() {
-        ThisApplication.instance.saveToFile()
+        new SaveToFile().execute("test")
 
         super.onStop()
     }
