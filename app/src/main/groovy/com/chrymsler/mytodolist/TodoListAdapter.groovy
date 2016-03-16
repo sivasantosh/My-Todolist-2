@@ -5,8 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater;
 import android.view.View
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.TextView
+import groovy.transform.CompileStatic;
 
+@CompileStatic
 public class TodoListAdapter extends RecyclerView.Adapter<ViewHolder> {
     TodoListActivity mTodoListActivity
     int index;

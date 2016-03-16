@@ -2,13 +2,15 @@ package com.chrymsler.mytodolist;
 
 import android.app.Application
 import android.content.Context
+import groovy.transform.CompileStatic
 import org.json.JSONArray
 import org.json.JSONObject;
 
+@CompileStatic
 public class ThisApplication extends Application {
     static ThisApplication singleton
-    ArrayList<String> titles
-    ArrayList<ArrayList<String>> todos
+    List<String> titles
+    List<List<String>> todos
 
     public static ThisApplication getInstance () {
         return singleton

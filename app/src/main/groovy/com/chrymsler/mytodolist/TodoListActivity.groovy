@@ -11,8 +11,10 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem
-import android.widget.EditText;
+import android.widget.EditText
+import groovy.transform.CompileStatic;
 
+@CompileStatic
 public class TodoListActivity extends AppCompatActivity {
     RecyclerView mTodolistView
     TodoListAdapter mAdapter
@@ -109,7 +111,7 @@ public class TodoListActivity extends AppCompatActivity {
                     setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         void onClick(DialogInterface dialog, int which) {
-                            ThisApplication.instance.todos[mIndex] += input.getText().toString()
+                            ThisApplication.instance.todos[mIndex].add(input.getText().toString())
                             mAdapter.notifyItemInserted(ThisApplication.instance.todos[mIndex].size() - 1)
                         }
                     }).

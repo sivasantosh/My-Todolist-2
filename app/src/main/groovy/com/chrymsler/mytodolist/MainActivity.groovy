@@ -13,8 +13,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem
 import android.widget.EditText
-import android.widget.Toast;
+import android.widget.Toast
+import groovy.transform.CompileStatic;
 
+@CompileStatic
 public class MainActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     TitlesAdapter mTitlesAdapter;
