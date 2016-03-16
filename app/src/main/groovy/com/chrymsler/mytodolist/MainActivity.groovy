@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         EditText input = new EditText(this)
         input.setText(ThisApplication.instance.titles[index])
         AlertDialog.Builder dialog = new AlertDialog.Builder(this).
-                setTitle("New TodoList").
+                setTitle("Edit Title").
                 setView(input).
                 setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -165,9 +165,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
         ThisApplication.instance.saveToFile()
 
-        super.onDestroy()
+        super.onStop()
     }
 }
