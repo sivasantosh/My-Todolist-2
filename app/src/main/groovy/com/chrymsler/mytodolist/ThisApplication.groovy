@@ -35,7 +35,7 @@ public class ThisApplication extends Application {
 
             jsondata = new String(bytes)
         } else {
-            jsondata = '{"main":[{"title":"sample list", "todos":[ {"todo":"item 1"}, {"todo":"item 2"}, {"todo":"item 3"} ]}]}'
+            jsondata = '{"main":[{"title":"Tutorial", "todos":[ {"todo":"This is todo."}, {"todo":"Swipe me left/right to delete."}, {"todo":"Drag me up or down to reposition."}, {"todo":"Tap to edit."}]}]}'
         }
 
         // loading mock values
@@ -75,12 +75,10 @@ public class ThisApplication extends Application {
             arr1.put(obj2)
         }
 
-        JSONObject obj3 = new JSONObject()
-        obj3.put("main", arr1)
+        JSONObject jsonData = new JSONObject()
+        jsonData.put("main", arr1)
 
-        FileOutputStream outputStream
-
-        outputStream = openFileOutput("appdata", Context.MODE_PRIVATE)
+        FileOutputStream outputStream = openFileOutput("appdata", Context.MODE_PRIVATE)
         try {
             outputStream.write(obj3.toString().bytes)
         } catch (Exception e) {
