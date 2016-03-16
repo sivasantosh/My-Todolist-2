@@ -37,7 +37,7 @@ public class ThisApplication extends Application {
 
             jsondata = new String(bytes)
         } else {
-            jsondata = '{"main":[{"title":"Tutorial", "todos":[ {"todo":"This is a todo entry."}, {"todo":"Swipe me left/right to delete."}, {"todo":"Drag up/down to reposition."}, {"todo":"Tap to edit."}]}]}'
+            jsondata = '{"main":[{"title":"Tutorial", "todos":[ {"todo":"This is a todo entry."}, {"todo":"Swipe left/right to delete."}, {"todo":"Drag up/down to reposition."}, {"todo":"Tap to edit."}]}]}'
         }
 
         // loading mock values
