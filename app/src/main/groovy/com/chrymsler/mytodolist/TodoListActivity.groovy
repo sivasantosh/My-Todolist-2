@@ -131,7 +131,7 @@ public class TodoListActivity extends AppCompatActivity {
         input.setText(todo)
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(this).
-                setTitle("New Todo").
+                setTitle("Edit Todo").
                 setView(input).
                 setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
