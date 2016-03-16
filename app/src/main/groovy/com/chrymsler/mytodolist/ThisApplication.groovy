@@ -7,10 +7,10 @@ import org.json.JSONObject;
 
 public class ThisApplication extends Application {
     static ThisApplication singleton
-    def titles
-    def todos
+    ArrayList<String> titles
+    ArrayList<ArrayList<String>> todos
 
-    public static def getInstance () {
+    public static ThisApplication getInstance () {
         return singleton
     }
 
@@ -20,7 +20,7 @@ public class ThisApplication extends Application {
 
         singleton = this
 
-        def jsondata
+        String jsondata
 
         // load data from file
         File file = new File(getFilesDir(), "appdata")
@@ -35,7 +35,7 @@ public class ThisApplication extends Application {
 
             jsondata = new String(bytes)
         } else {
-            jsondata = '{"main":[{"title":"Tutorial", "todos":[ {"todo":"This is todo."}, {"todo":"Swipe me left/right to delete."}, {"todo":"Drag me up or down to reposition."}, {"todo":"Tap to edit."}]}]}'
+            jsondata = '{"main":[{"title":"Tutorial", "todos":[ {"todo":"This is a todo entry."}, {"todo":"Swipe me left/right to delete."}, {"todo":"Drag up/down to reposition."}, {"todo":"Tap to edit."}]}]}'
         }
 
         // loading mock values
@@ -46,14 +46,14 @@ public class ThisApplication extends Application {
         JSONArray jsonArray = jsonObject.getJSONArray("main")
 
         for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject obj = jsonArray.get(i)
-            titles[i] = obj.get("title")
+            JSONObject obj = jsonArray.getJSONObject(i)
+            titles[i] = obj.getString("title")
 
             todos[i] = []
             JSONArray jsonArray1 = obj.getJSONArray("todos")
             for (int j = 0; j < jsonArray1.length(); j++) {
-                JSONObject obj1 = jsonArray1.get(j)
-                todos[i][j] = obj1.get("todo")
+                JSONObject obj1 = jsonArray1.getJSONObject(j)
+                todos.get(i).putAt(j, obj1.getString("todo"))
             }
         }
     }
@@ -80,7 +80,7 @@ public class ThisApplication extends Application {
 
         FileOutputStream outputStream = openFileOutput("appdata", Context.MODE_PRIVATE)
         try {
-            outputStream.write(obj3.toString().bytes)
+            outputStream.write(jsonData.toString().bytes)
         } catch (Exception e) {
             e.printStackTrace()
         } finally {
