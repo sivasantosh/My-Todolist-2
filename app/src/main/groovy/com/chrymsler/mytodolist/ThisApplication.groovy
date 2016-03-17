@@ -175,4 +175,12 @@ public class ThisApplication extends Application {
     int getTodosCount (int list_id) {
         todos[list_id].size()
     }
+
+    Priority getPriority (int list_id, int todo_id) {
+        todos[list_id][todo_id].priority
+    }
+
+    void setPriority (int listId, int todoId, Priority p) {
+        todos[listId][todoId].priority = p
+    }
 }

@@ -22,10 +22,32 @@ public class TodoListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     void onBindViewHolder(ViewHolder holder, int position) {
-        holder.imageView.setImageResource(R.drawable.mark_do)
+        String p = ThisApplication.instance.getPriority(index, position).toString()
+        int d = mTodoListActivity.getResources().getIdentifier(p, "drawable", mTodoListActivity.getPackageName())
+        holder.imageView.setImageResource(d)
 
         String item = ThisApplication.instance.getTodo(index, position)
         holder.todoItem.setText(item)
+
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            void onClick(View v) {
+                int pos = ThisApplication.instance.getTodosIndex(index, item)
+                switch (ThisApplication.instance.getPriority(index, pos)) {
+                    case ThisApplication.Priority.normal:
+                        ThisApplication.instance.setPriority(index, pos, ThisApplication.Priority.completed)
+                        break
+                    case ThisApplication.Priority.completed:
+                        ThisApplication.instance.setPriority(index, pos, ThisApplication.Priority.important)
+                        break
+                    case ThisApplication.Priority.important:
+                        ThisApplication.instance.setPriority(index, pos, ThisApplication.Priority.normal)
+                        break
+                }
+
+                notifyItemChanged(pos)
+            }
+        })
 
         holder.todoItem.setOnClickListener(new View.OnClickListener() {
             @Override
