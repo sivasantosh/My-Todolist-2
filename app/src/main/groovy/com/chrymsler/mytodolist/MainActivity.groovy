@@ -51,28 +51,13 @@ public class MainActivity extends AppCompatActivity {
 
                 if (fromPos < toPos) {
                     for (int i = fromPos; i < toPos; i++) {
-                        println "< "+i
-                        def tmp = ThisApplication.instance.titles[i]
-                        ThisApplication.instance.titles[i] = ThisApplication.instance.titles[i+1]
-                        ThisApplication.instance.titles[i+1] = tmp
+                        ThisApplication.instance.swapTodoList(i, i+1)
                     }
                 } else {
                     for (int i = fromPos; i > toPos; i--) {
-                        println "> "+i
-                        def tmp = ThisApplication.instance.titles[i]
-                        ThisApplication.instance.titles[i] = ThisApplication.instance.titles[i-1]
-                        ThisApplication.instance.titles[i-1] = tmp
+                        ThisApplication.instance.swapTodoList(i, i-1)
                     }
                 }
-
-                println "exchanging "+fromPos+" to "+toPos
-
-                def tmp1 = ThisApplication.instance.todos[fromPos]
-                ThisApplication.instance.todos[fromPos] = ThisApplication.instance.todos[toPos]
-                ThisApplication.instance.todos[toPos] = tmp1
-
-                println "comparing from "+ThisApplication.instance.titles[fromPos]+" "+ThisApplication.instance.todos[fromPos][0]
-                println "comparing to "+ThisApplication.instance.titles[toPos]+" "+ThisApplication.instance.todos[toPos][0]
 
                 mTitlesAdapter.notifyItemMoved(fromPos, toPos)
 
@@ -83,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
             void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 // delete the respective title and todolist
                 int pos = viewHolder.adapterPosition
-                ThisApplication.instance.todos.removeAt(pos)
-                ThisApplication.instance.titles.removeAt(pos)
+                ThisApplication.instance.removeTodoList(pos)
 
                 mTitlesAdapter.notifyItemRemoved(pos)
             }
@@ -111,14 +95,14 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.new_list:
                 EditText input = new EditText(this)
-                def that = this;
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this).
                         setTitle("New TodoList").
                         setView(input).
                         setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             void onClick(DialogInterface dialog, int which) {
-                                gotoTodoListActivity(mTitlesAdapter.addTodoList(input.getText().toString()))
+                                def i = ThisApplication.instance.addTodoList(input.getText().toString())
+                                gotoTodoListActivity(i)
                             }
                         }).
                         setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -146,14 +130,14 @@ public class MainActivity extends AppCompatActivity {
 
     void editTitle (int index) {
         EditText input = new EditText(this)
-        input.setText(ThisApplication.instance.titles[index])
+        input.setText(ThisApplication.instance.getTitle(index))
         AlertDialog.Builder dialog = new AlertDialog.Builder(this).
                 setTitle("Edit Title").
                 setView(input).
                 setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     void onClick(DialogInterface dialog, int which) {
-                        ThisApplication.instance.titles[index] = input.getText().toString()
+                        ThisApplication.instance.setTitle(index, input.getText().toString())
                         mTitlesAdapter.notifyItemChanged(index)
                     }
                 }).

@@ -20,13 +20,13 @@ public class TitlesAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     void onBindViewHolder(ViewHolder viewHolder, int i) {
-        def name = ThisApplication.instance.titles[i]
+        def name = ThisApplication.instance.getTitle(i)
         viewHolder.titleTextView.setText(name)
 
         viewHolder.titleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(View v) {
-                int pos = ThisApplication.instance.titles.findIndexOf { it == name }
+                int pos = ThisApplication.instance.getTitlesIndex(name)
                 mainActivity.gotoTodoListActivity(pos)
             }
         })
@@ -34,7 +34,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<ViewHolder> {
         viewHolder.titleTextView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             boolean onLongClick(View v) {
-                int pos = ThisApplication.instance.titles.findIndexOf { it == name }
+                int pos = ThisApplication.instance.getTitlesIndex(name)
                 mainActivity.editTitle(pos)
                 return true
             }
@@ -43,7 +43,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     int getItemCount() {
-        return ThisApplication.instance.titles.size()
+        return ThisApplication.instance.todoListsCount
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -58,13 +58,5 @@ public class TitlesAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     TitlesAdapter (MainActivity activity) {
         mainActivity = activity
-    }
-
-    int addTodoList(String title) {
-        ThisApplication.instance.titles += title
-        int i = (ThisApplication.instance.titles.size() - 1)
-        ThisApplication.instance.todos[i] = []
-
-        return i
     }
 }

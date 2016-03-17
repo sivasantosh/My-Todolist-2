@@ -8,9 +8,9 @@ import org.json.JSONObject;
 
 @CompileStatic
 public class ThisApplication extends Application {
-    static ThisApplication singleton
-    List<String> titles
-    List<List<String>> todos
+    private static ThisApplication singleton
+    private List<String> titles
+    private List<List<String>> todos
 
     public static ThisApplication getInstance () {
         return singleton
@@ -88,5 +88,75 @@ public class ThisApplication extends Application {
         } finally {
             outputStream.close()
         }
+    }
+
+    String getTitle (int list_id) {
+        return titles[list_id]
+    }
+
+    void setTitle (int list_id, String title) {
+        titles[list_id] = title
+    }
+
+    int getTitlesIndex (String title) {
+        return titles.findIndexOf { it == title }
+    }
+
+    int getTodoListsCount () {
+        return titles.size()
+    }
+
+    int addTodoList(String title) {
+        titles += title
+        int i = (titles.size() - 1)
+        todos[i] = []
+
+        return i
+    }
+
+    String getTodo (int list_id, int todo_id) {
+        return todos[list_id][todo_id]
+    }
+
+    int getTodosIndex (int list_id, String todo) {
+        todos[list_id].findIndexOf { it == todo }
+    }
+
+    void setTodo (int list_id, int todo_id, String todo) {
+        todos[list_id][todo_id] = todo
+    }
+
+    int addTodo (int list_id, String todo) {
+        todos[list_id].add(todo)
+        todos[list_id].size() - 1
+    }
+
+    void swapTodoList (int from, int to) {
+        def tmp = titles[from]
+        titles[from] = titles[to]
+        titles[to] = tmp
+
+        def tmp1 = todos[from]
+        todos[from] = todos[to]
+        todos[to] = tmp1
+    }
+
+    void swapTodos (int list_id, int from, int to) {
+        def tmp = todos[list_id][from]
+        todos[list_id][from] = todos[list_id][to]
+        todos[list_id][to] = tmp
+    }
+
+    void removeTodoList (int list_id) {
+        todos.removeAt(list_id)
+        titles.removeAt(list_id)
+    }
+
+    void removeTodo (int list_id, int todo_id) {
+        todos[list_id].removeAt(todo_id)
+    }
+
+    int getTodosCount (int list_id) {
+        todos[list_id].size()
     }
 }

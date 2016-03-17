@@ -4,7 +4,8 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater;
 import android.view.View
-import android.view.ViewGroup;
+import android.view.ViewGroup
+import android.widget.ImageView;
 import android.widget.TextView
 import groovy.transform.CompileStatic;
 
@@ -21,14 +22,16 @@ public class TodoListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     void onBindViewHolder(ViewHolder holder, int position) {
-        String item = ThisApplication.instance.todos[index][position]
+        holder.imageView.setImageResource(R.drawable.mark_do)
+
+        String item = ThisApplication.instance.getTodo(index, position)
         holder.todoItem.setText(item)
 
         holder.todoItem.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(View v) {
                 // edit this item
-                int pos = ThisApplication.instance.todos[index].findIndexOf { it == item }
+                int pos = ThisApplication.instance.getTodosIndex(index, item)
                 mTodoListActivity.editTodoItem(pos, item)
             }
         })
@@ -36,16 +39,18 @@ public class TodoListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     int getItemCount() {
-        return ThisApplication.instance.todos[index].size()
+        ThisApplication.instance.getTodosCount(index)
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView todoItem
+        ImageView imageView
 
         ViewHolder (View v) {
             super(v);
 
             todoItem = (TextView) v.findViewById(R.id.todoItemTextView)
+            imageView = (ImageView) v.findViewById(R.id.imageView2)
         }
     }
 

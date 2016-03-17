@@ -27,7 +27,7 @@ public class TodoListActivity extends AppCompatActivity {
 
         Intent intent = getIntent()
         mIndex = intent.getIntExtra("index", 0)
-        setTitle("\""+ThisApplication.instance.titles[mIndex]+"\" todos")
+        setTitle("\""+ThisApplication.instance.getTitle(mIndex)+"\" todos")
 
         // load recycler view of todolist
         mTodolistView = (RecyclerView) findViewById(R.id.todolistRecyclerView)
@@ -55,15 +55,11 @@ public class TodoListActivity extends AppCompatActivity {
 
                 if (fromPos < toPos) {
                     for (int i = fromPos; i < toPos; i++) {
-                        def tmp = ThisApplication.instance.todos[mIndex][i]
-                        ThisApplication.instance.todos[mIndex][i] = ThisApplication.instance.todos[mIndex][i+1]
-                        ThisApplication.instance.todos[mIndex][i+1] = tmp
+                        ThisApplication.instance.swapTodos(mIndex, i, i+1)
                     }
                 } else {
                     for (int i = fromPos; i > toPos ; i--) {
-                        def tmp = ThisApplication.instance.todos[mIndex][i]
-                        ThisApplication.instance.todos[mIndex][i] = ThisApplication.instance.todos[mIndex][i-1]
-                        ThisApplication.instance.todos[mIndex][i-1] = tmp
+                        ThisApplication.instance.swapTodos(mIndex, i, i-1)
                     }
                 }
 
@@ -75,7 +71,7 @@ public class TodoListActivity extends AppCompatActivity {
             @Override
             void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int pos = viewHolder.getAdapterPosition()
-                ThisApplication.instance.todos[mIndex].removeAt(pos)
+                ThisApplication.instance.removeTodo(mIndex, pos)
                 mAdapter.notifyItemRemoved(pos)
             }
         })
@@ -111,8 +107,8 @@ public class TodoListActivity extends AppCompatActivity {
                     setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         void onClick(DialogInterface dialog, int which) {
-                            ThisApplication.instance.todos[mIndex].add(input.getText().toString())
-                            mAdapter.notifyItemInserted(ThisApplication.instance.todos[mIndex].size() - 1)
+                            def i = ThisApplication.instance.addTodo(mIndex, input.getText().toString())
+                            mAdapter.notifyItemInserted(i)
                         }
                     }).
                     setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -138,7 +134,7 @@ public class TodoListActivity extends AppCompatActivity {
                 setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     void onClick(DialogInterface dialog, int which) {
-                        ThisApplication.instance.todos[mIndex][index] = input.getText().toString()
+                        ThisApplication.instance.setTodo(mIndex, index, input.getText().toString())
                         mAdapter.notifyItemChanged(index)
                     }
                 }).
