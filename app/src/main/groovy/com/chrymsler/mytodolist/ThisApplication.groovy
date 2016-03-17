@@ -1,16 +1,27 @@
 package com.chrymsler.mytodolist;
 
 import android.app.Application
-import android.content.Context
 import groovy.transform.CompileStatic
 import org.json.JSONArray
 import org.json.JSONObject;
 
 @CompileStatic
 public class ThisApplication extends Application {
+    enum Priority { normal, important, completed }
+
+    class TodoEntry {
+        String todo
+        Priority priority
+
+        TodoEntry (String t, Priority p) {
+            todo = t
+            priority = p
+        }
+    }
+
     private static ThisApplication singleton
     private List<String> titles
-    private List<List<String>> todos
+    private List<List<TodoEntry>> todos
 
     public static ThisApplication getInstance () {
         return singleton
@@ -37,7 +48,7 @@ public class ThisApplication extends Application {
 
             jsondata = new String(bytes)
         } else {
-            jsondata = '{"main":[{"title":"Tutorial", "todos":[ {"todo":"This is a todo entry."}, {"todo":"Swipe left/right to delete."}, {"todo":"Drag up/down to reposition."}, {"todo":"Tap to edit."}]}]}'
+            jsondata = '{"main":[{"title":"Tutorial", "todos":[ {"todo":"This is a todo entry.", "priority": "normal"}, {"todo":"Swipe left/right to delete.", "priority": "normal"}, {"todo":"Drag up/down to reposition.", "priority": "normal"}, {"todo":"Tap to edit.", "priority": "important"}]}]}'
         }
 
         // loading mock values
@@ -55,7 +66,9 @@ public class ThisApplication extends Application {
             JSONArray jsonArray1 = obj.getJSONArray("todos")
             for (int j = 0; j < jsonArray1.length(); j++) {
                 JSONObject obj1 = jsonArray1.getJSONObject(j)
-                todos.get(i).putAt(j, obj1.getString("todo"))
+                String todo = obj1.getString("todo")
+                Priority priority1 = Priority.valueOf(obj1.getString("priority"))
+                todos.get(i).putAt(j, new TodoEntry(todo, priority1))
             }
         }
     }
@@ -66,7 +79,8 @@ public class ThisApplication extends Application {
             JSONArray arr2 = new JSONArray()
             for (int j = 0; j < todos[i].size(); j++) {
                 JSONObject obj = new JSONObject()
-                obj.put("todo", todos[i][j])
+                obj.put("todo", todos[i][j].todo)
+                obj.put("priority", todos[i][j].priority)
                 arr2.put(obj)
             }
 
@@ -80,7 +94,7 @@ public class ThisApplication extends Application {
         JSONObject jsonData = new JSONObject()
         jsonData.put("main", arr1)
 
-        FileOutputStream outputStream = openFileOutput("appdata", Context.MODE_PRIVATE)
+        FileOutputStream outputStream = openFileOutput("appdata", MODE_PRIVATE)
         try {
             outputStream.write(jsonData.toString().bytes)
         } catch (Exception e) {
@@ -91,7 +105,7 @@ public class ThisApplication extends Application {
     }
 
     String getTitle (int list_id) {
-        return titles[list_id]
+        titles[list_id]
     }
 
     void setTitle (int list_id, String title) {
@@ -99,7 +113,7 @@ public class ThisApplication extends Application {
     }
 
     int getTitlesIndex (String title) {
-        return titles.findIndexOf { it == title }
+        titles.findIndexOf { it == title }
     }
 
     int getTodoListsCount () {
@@ -115,19 +129,21 @@ public class ThisApplication extends Application {
     }
 
     String getTodo (int list_id, int todo_id) {
-        return todos[list_id][todo_id]
+        todos[list_id][todo_id].todo
     }
 
     int getTodosIndex (int list_id, String todo) {
-        todos[list_id].findIndexOf { it == todo }
+        todos[list_id].findIndexOf { TodoEntry t ->
+            t.todo == todo
+        }
     }
 
     void setTodo (int list_id, int todo_id, String todo) {
-        todos[list_id][todo_id] = todo
+        todos[list_id][todo_id].todo = todo
     }
 
     int addTodo (int list_id, String todo) {
-        todos[list_id].add(todo)
+        todos[list_id].add(new TodoEntry(todo, Priority.normal))
         todos[list_id].size() - 1
     }
 
