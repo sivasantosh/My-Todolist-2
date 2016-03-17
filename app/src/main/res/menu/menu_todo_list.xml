@@ -4,6 +4,6 @@
     tools:context="com.chrymsler.mytodolist.TodoListActivity">
     <item android:id="@+id/new_todo" android:title="New Todo" android:icon="@drawable/add_button"
         android:orderInCategory="100" app:showAsAction="always" />
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_about1" android:title="@string/action_about" android:icon="@android:drawable/ic_dialog_info"
+        android:orderInCategory="100" app:showAsAction="always" />
 </menu>

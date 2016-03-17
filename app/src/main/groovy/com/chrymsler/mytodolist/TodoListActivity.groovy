@@ -95,8 +95,6 @@ public class TodoListActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         switch (id) {
-            case R.id.action_settings:
-                return true
             case R.id.new_todo:
                 // get to do from user using a dialog
                 EditText input = new EditText(this)
@@ -118,6 +116,9 @@ public class TodoListActivity extends AppCompatActivity {
                         }
                     })
                 dialog.show()
+                return true
+            case R.id.action_about1:
+                startActivity(new Intent(this, AboutActivity.class))
                 return true
         }
 

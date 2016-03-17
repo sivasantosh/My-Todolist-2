@@ -21,6 +21,10 @@
             android:name=".TodoListActivity"
             android:label="@string/title_activity_todo_list" >
         </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about" >
+        </activity>
     </application>
 
 </manifest>

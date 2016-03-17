@@ -114,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
 
                 dialog.show()
                 return true;
-            case R.id.action_settings:
+            case R.id.action_about:
+                startActivity(new Intent(this, AboutActivity.class))
                 return true;
         }
 
