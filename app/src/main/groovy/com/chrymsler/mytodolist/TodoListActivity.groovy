@@ -11,12 +11,15 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
+import android.widget.TextView
 import groovy.transform.CompileStatic;
 
 @CompileStatic
 public class TodoListActivity extends AppCompatActivity {
     RecyclerView mTodolistView
+    TextView mTodosHelpText
     TodoListAdapter mAdapter
     int mIndex
 
@@ -31,6 +34,10 @@ public class TodoListActivity extends AppCompatActivity {
 
         // load recycler view of todolist
         mTodolistView = (RecyclerView) findViewById(R.id.todolistRecyclerView)
+
+        mTodosHelpText = (TextView) findViewById(R.id.todosHelpText)
+
+        configureTodosVisibility()
 
         // set layout manager for recycler view
         mTodolistView.setLayoutManager(new LinearLayoutManager(this))
@@ -73,6 +80,8 @@ public class TodoListActivity extends AppCompatActivity {
                 int pos = viewHolder.getAdapterPosition()
                 ThisApplication.instance.removeTodo(mIndex, pos)
                 mAdapter.notifyItemRemoved(pos)
+
+                configureTodosVisibility()
             }
         })
 
@@ -106,6 +115,9 @@ public class TodoListActivity extends AppCompatActivity {
                         @Override
                         void onClick(DialogInterface dialog, int which) {
                             def i = ThisApplication.instance.addTodo(mIndex, input.getText().toString())
+
+                            configureTodosVisibility()
+
                             mAdapter.notifyItemInserted(i)
                         }
                     }).
@@ -123,6 +135,16 @@ public class TodoListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    void configureTodosVisibility () {
+        if (ThisApplication.instance.getTodosCount(mIndex) > 0) {
+            mTodolistView.visibility = View.VISIBLE
+            mTodosHelpText.visibility = View.GONE
+        } else {
+            mTodolistView.visibility = View.GONE
+            mTodosHelpText.visibility = View.VISIBLE
+        }
     }
 
     void editTodoItem (int index, String todo) {

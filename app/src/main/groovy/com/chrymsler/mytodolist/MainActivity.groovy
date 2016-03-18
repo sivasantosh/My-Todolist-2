@@ -12,7 +12,9 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import groovy.transform.CompileStatic;
 
@@ -20,6 +22,7 @@ import groovy.transform.CompileStatic;
 public class MainActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     TitlesAdapter mTitlesAdapter;
+    TextView mTitlesHelpText
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main)
 
         mRecyclerView = (RecyclerView) findViewById(R.id.titles)
+        mTitlesHelpText = (TextView) findViewById(R.id.titlesHelpText)
+
+        configureTitlesVisibility()
 
         mRecyclerView.setHasFixedSize(true)
 
@@ -71,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
                 ThisApplication.instance.removeTodoList(pos)
 
                 mTitlesAdapter.notifyItemRemoved(pos)
+
+                configureTitlesVisibility()
             }
         })
 
@@ -102,6 +110,9 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             void onClick(DialogInterface dialog, int which) {
                                 def i = ThisApplication.instance.addTodoList(input.getText().toString())
+
+                                configureTitlesVisibility()
+
                                 gotoTodoListActivity(i)
                             }
                         }).
@@ -120,6 +131,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    void configureTitlesVisibility () {
+        if (ThisApplication.instance.todoListsCount > 0) {
+            mTitlesHelpText.visibility = View.GONE
+            mRecyclerView.visibility = View.VISIBLE
+        } else {
+            mTitlesHelpText.visibility = View.VISIBLE
+            mRecyclerView.visibility = View.GONE
+        }
     }
 
     void gotoTodoListActivity (int index) {
