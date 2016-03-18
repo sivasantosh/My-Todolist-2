@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.new_list:
                 EditText input = new EditText(this)
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this).
-                        setTitle("New TodoList").
+                        setTitle("New Folder").
                         setView(input).
                         setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         EditText input = new EditText(this)
         input.setText(ThisApplication.instance.getTitle(index))
         AlertDialog.Builder dialog = new AlertDialog.Builder(this).
-                setTitle("Edit Title").
+                setTitle("Rename Folder").
                 setView(input).
                 setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
