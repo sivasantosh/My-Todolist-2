@@ -48,7 +48,7 @@ public class ThisApplication extends Application {
 
             jsondata = new String(bytes)
         } else {
-            jsondata = '{"main":[{"title":"Tutorial", "todos":[ {"todo":"This is a todo entry.", "priority": "normal"}, {"todo":"Swipe left/right to delete.", "priority": "normal"}, {"todo":"Drag up/down to reposition.", "priority": "normal"}, {"todo":"Tap to edit.", "priority": "important"}]}]}'
+            jsondata = '{"main":[{"title":"Tutorial", "todos":[ {"todo":"This is a todo entry.", "priority": "normal"}, {"todo":"Swipe left/right to delete.", "priority": "normal"}, {"todo":"Drag up/down to reposition.", "priority": "normal"}, {"todo":"Tap to edit.", "priority": "important"}, {"todo":"Tap icon to change priority.", "priority": "completed"}]}]}'
         }
 
         // loading mock values
