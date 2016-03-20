@@ -148,6 +148,7 @@ public class TodoListActivity extends AppCompatActivity {
                             configureTodosVisibility()
 
                             mAdapter.notifyItemInserted(i)
+                            mTodolistView.scrollToPosition(i)
                         }
                     }).
                     setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

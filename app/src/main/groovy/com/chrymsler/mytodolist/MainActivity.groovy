@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             void onClick(DialogInterface dialog, int which) {
                                 def i = ThisApplication.instance.addTodoList(input.getText().toString())
+                                mRecyclerView.scrollToPosition(i)
 
                                 configureTitlesVisibility()
 
