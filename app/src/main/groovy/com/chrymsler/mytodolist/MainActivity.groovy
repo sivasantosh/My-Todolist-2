@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 int pos = viewHolder.adapterPosition
 
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext())
-                if (sp.getBoolean("confirmFolderDelete", false)) {
+                if (sp.getBoolean("confirmFolderDelete", true)) {
                     confirmDeleteFolder(pos)
                 } else {
                     deleteFolder(pos)

@@ -81,7 +81,7 @@ public class TodoListActivity extends AppCompatActivity {
                 int pos = viewHolder.getAdapterPosition()
 
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext())
-                if (sp.getBoolean("confirmTodoDelete", false)) {
+                if (sp.getBoolean("confirmTodoDelete", true)) {
                     confirmDeleteTodo(pos)
                 } else {
                     deleteTodo(pos)
