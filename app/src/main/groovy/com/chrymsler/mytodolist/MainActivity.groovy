@@ -207,15 +207,6 @@ public class MainActivity extends AppCompatActivity {
         dialog.show()
     }
 
-    class SaveToFile extends AsyncTask<Object, Void, Void> {
-        @Override
-        protected Void doInBackground(Object... params) {
-            ThisApplication.instance.saveToFile()
-
-            return null
-        }
-    }
-
     @Override
     protected void onStop() {
         new SaveToFile().execute("test")
