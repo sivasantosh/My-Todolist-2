@@ -1,14 +1,15 @@
 package com.chrymsler.mytodolist
 
-import android.app.AlertDialog
 import android.content.DialogInterface
-import android.content.Intent;
+import android.content.Intent
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem
 import android.view.View
@@ -78,14 +79,42 @@ public class TodoListActivity extends AppCompatActivity {
             @Override
             void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int pos = viewHolder.getAdapterPosition()
-                ThisApplication.instance.removeTodo(mIndex, pos)
-                mAdapter.notifyItemRemoved(pos)
 
-                configureTodosVisibility()
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext())
+                if (sp.getBoolean("confirmTodoDelete", false)) {
+                    confirmDeleteTodo(pos)
+                } else {
+                    deleteTodo(pos)
+                }
             }
         })
 
         ith.attachToRecyclerView(mTodolistView)
+    }
+
+    void deleteTodo (int pos) {
+        ThisApplication.instance.removeTodo(mIndex, pos)
+        mAdapter.notifyItemRemoved(pos)
+
+        configureTodosVisibility()
+    }
+
+    void confirmDeleteTodo (int pos) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this).
+                setMessage("Are you sure?").
+                setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    void onClick(DialogInterface dialog, int which) {
+                        deleteTodo(pos)
+                    }
+                }).
+                setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    void onClick(DialogInterface dialog, int which) {
+                        mAdapter.notifyItemChanged(pos)
+                    }
+                })
+        dialog.show()
     }
 
     @Override
@@ -128,6 +157,9 @@ public class TodoListActivity extends AppCompatActivity {
                         }
                     })
                 dialog.show()
+                return true
+            case R.id.action_settings1:
+                startActivity(new Intent(this, MyPreferencesActivity.class))
                 return true
             case R.id.action_about1:
                 startActivity(new Intent(this, AboutActivity.class))

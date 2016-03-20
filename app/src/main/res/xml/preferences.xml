@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference android:title="Confirm folder delete"
+        android:summary="You will be prompted to confirm the folder deletion."
+        android:defaultValue="true"
+        android:key="confirmFolderDelete" />
+    <CheckBoxPreference android:title="Confirm todo delete"
+        android:summary="You will be prompted to confirm the todo deletion."
+        android:defaultValue="true"
+        android:key="confirmTodoDelete" />
+</PreferenceScreen>

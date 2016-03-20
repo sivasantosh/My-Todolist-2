@@ -1,9 +1,11 @@
 package com.chrymsler.mytodolist
 
-import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.AsyncTask;
+import android.content.SharedPreferences
+import android.os.AsyncTask
+import android.preference.PreferenceManager
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -72,17 +74,45 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                // delete the respective title and todolist
                 int pos = viewHolder.adapterPosition
-                ThisApplication.instance.removeTodoList(pos)
 
-                mTitlesAdapter.notifyItemRemoved(pos)
-
-                configureTitlesVisibility()
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext())
+                if (sp.getBoolean("confirmFolderDelete", false)) {
+                    confirmDeleteFolder(pos)
+                } else {
+                    deleteFolder(pos)
+                }
             }
         })
 
         ith.attachToRecyclerView(mRecyclerView)
+    }
+
+    void deleteFolder (int pos) {
+        // delete the respective title and todolist
+        ThisApplication.instance.removeTodoList(pos)
+
+        mTitlesAdapter.notifyItemRemoved(pos)
+
+        configureTitlesVisibility()
+    }
+
+    void confirmDeleteFolder (int pos) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this).
+                setMessage("Are you sure?").
+                setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    void onClick(DialogInterface dialog, int which) {
+                        deleteFolder(pos)
+                    }
+                }).
+                setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    void onClick(DialogInterface dialog, int which) {
+                        mTitlesAdapter.notifyItemChanged(pos)
+                    }
+                })
+        dialog.show()
     }
 
     @Override
@@ -128,6 +158,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_about:
                 startActivity(new Intent(this, AboutActivity.class))
                 return true;
+            case R.id.action_settings:
+                startActivity(new Intent(this, MyPreferencesActivity.class))
+                return true
         }
 
         return super.onOptionsItemSelected(item);
